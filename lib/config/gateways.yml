@@ -1,0 +1,15 @@
+# The various email sms gateways for various US-based carriers
+# Info comes from wikipedia page: http://en.wikipedia.org/wiki/List_of_SMS_gateways
+
+alltel: sms.alltelwireless.com
+att: txt.att.net
+boost: myboostmobile.com
+cricket: sms.mycricket.com
+metro: mymetropcs.com
+rogers: pcs.rogers.com
+simple: smtext.com
+sprint: messaging.sprintpcs.com
+tmobile: tmomail.net
+telus: msg.telus.com
+verizon: vtext.com
+virgin: vmobl.com

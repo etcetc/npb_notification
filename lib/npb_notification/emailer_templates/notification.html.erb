@@ -1,0 +1,17 @@
+<%- require 'pp' %>
+<%=  @message %>
+
+<%- (@params||[]).each do |name,value| %>
+
+<%- p =  PP.pp(value,"") -%>
+<%- if p.count("\n") > 1 -%>
+-------------
+<%= name %>
+-------------
+<%=  p %>
+<%- else -%>
+<%= name %> => <%= p %>
+<%- end -%>
+
+<%- end -%>
+

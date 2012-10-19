@@ -1,0 +1,21 @@
+# Sample notification file
+# Place this in your config directory and customize it
+# email:
+#   from: admin@mysite.com
+#   to: joe, jerry
+#   subject_prefix: MySite
+#   subject_line_length: 50
+#   addresses:
+#     joe: joe@mysite.com
+#     jerry: jerry@mysite.com
+#     harry: harry@gmail.com
+#  You can also define groups that reference individuals
+#     graders: jerry, joe
+# Define templates for sms
+# sms:
+#   from: mysite <admin@mysite.com>
+#   subject_prefix: MYSITE
+#   to: jerry, joe
+#   addresses:
+#     joe: 2221114444@att
+#     jerry: 1112223333@verizon
