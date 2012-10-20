@@ -18,7 +18,31 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+This gem requires you to do two things: 1) In your initializers directory please add a file, such as notifications.rb, with the following content:
+
+  require 'npb_notification'
+  NpbNotification.setup
+
+You also need to create the notifications config file, called notifications.yml that is placed in the config directory, and has a form like this:
+
+  email:
+    from: admin@mysite.com
+    to: joe, jerry
+    subject_prefix: MySite
+    subject_line_length: 50
+    addresses:
+      joe: joe@mysite.com
+      jerry: jerry@mysite.com
+      harry: harry@gmail.com
+      graders: jerry, joe
+
+  sms:
+    from: mysite <admin@mysite.com>
+    subject_prefix: MYSITE
+    to: jerry, joe
+    addresses:
+      joe: 2221114444@att
+      jerry: 1112223333@verizon
 
 ## Contributing
 

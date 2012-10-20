@@ -1,70 +1,63 @@
 # This module is used to push messages to us, nominally the system administrators...
 # It uses the action_mailer modules for rails
-module NoPlanB
 
-  module Notification
-  
-    # This texter sends the sms messages via email using the SMS email gateway
-    class Texter < NoPlanB::Notification::Notifier
-    
-      self.mailer_name = 'emailer_templates'
-      self.config_name = 'sms'
-    
-      class <<self
-        attr_accessor :subject_prefix,:from,:to, :subject_line_length
-        def notify(message,options={})
-          recipients = Array(address_for(options[:to] || Config[:sms,:to] )).select { |r| r.to_s.match(/(^|:)\d+/) }
-          recipients.each do |to|
-            deliver_notification(message,to,options)
+module NpbNotification
+
+  # This texter sends the sms messages via email using the SMS email gateway
+  class Texter < NpbNotification::Notifier
+
+    self.config_name = :sms
+
+    class <<self
+
+      # main method for sending texts.  You can add multiple 
+      def notify(message,options={})
+        recipients = Array(address_for(options.delete(:to) || Config[:sms][:to] ))
+        recipients.each do |to|
+          notification(message,to,options).deliver
+        end
+        recipients
+      end
+
+      # load the gateways file if one exists in the config directory, else use the one we're providing
+      def load_gateways
+        gateway_file = defined?(Rails) && Rails.root && File.join(Rails.root,'config','sms_gateways.yml') 
+        gateway_file = File.join(File.dirname(__FILE__),"..","config","sms_gateways.yml") unless gateway_file && File.exist?(gateway_file)
+
+        @@gateways = YAML.load_file(gateway_file)
+      end
+      
+      def address_for(a)
+        Array(super).map { |to| 
+          puts to
+          m = to.strip.match("([^@]+)@(.+)")
+          if m[2].index('.')
+            to
+          else
+            carrier = m[2].downcase
+            to = "#{to}@#{@@gateways[carrier]}"
           end
-          recipients
-        end
-        
-        def load_gateways
-          @@gateways = YAML.load(File.open(File.join(File.dirname(__FILE__),"..","config","gateways.yml")))
-        end
-        
+        }
       end
-      
-      # Notify 
-      def notification(message,to,options={})
-        if m = to.match(/:/) 
-          carrier, to = m.pre_match,m.post_match
-        elsif !to.index("@")
-          carrier = options[:carrier] 
-        end
-        if carrier && @@gateways[carrier]
-          to = "#{to}@#{@@gateways[carrier]}"
-        end
-        puts "to = #{to}, carrier=#{carrier}"
-        unless to.blank?
-          from(options[:from] || Config[:sms,:from])
-          recipients(to)
-          body message
-        end
-      end
-
-      # private
-
-      # def phone_number_for(key)
-      #   key = key.strip
-      #   # puts "finding phone for #{key.inspect}"
-      #   if key.match(/^[\d -]+$/)
-      #     num = key.sub(/\D/,'')
-      #   else
-      #     addresses = Config[:sms,:addresses]
-      #     unless addresses.blank? 
-      #       num = addresses[key]
-      #     end
-      #   end
-      #   num
-      # end
-
-      load_gateways
-      
     end
-       
-     
+    
+
+    # The to part of the notification is simply the full address, including the full gateway name, such as joe@txt.att.net,
+    # or joe@att, in which case we pull the gateway address from the gateways file
+    def notification(message,to,options={})
+      unless to.blank?
+        mail(
+          :from => options[:from] || Config[:sms][:from],
+          :to => to,
+          :body => message
+          )
+      end
+    end
+
+    load_gateways
+    
   end
-  
+
+
 end
+

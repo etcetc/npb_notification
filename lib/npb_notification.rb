@@ -1,7 +1,8 @@
 require "npb_notification/version"
 
-module NoPlanB::Notification
+module NpbNotification
 
+  require 'extensions/object'
   require 'npb_notification/config'
   require 'npb_notification/notifier'
   require 'npb_notification/emailer'
@@ -15,12 +16,12 @@ module NoPlanB::Notification
   module ClassMethods
     
     def npb_mail(*args)
-      NoPlanB::Notification::Emailer.notify(*args)
+      NpbNotification::Emailer.notify(*args)
     end
     alias_method :npb_email,:npb_mail
     
     def npb_sms(*args)
-      NoPlanB::Notification::Texter.notify(*args)
+      NpbNotification::Texter.notify(*args)
     end
     alias_method :npb_text,:npb_sms
     
@@ -49,5 +50,11 @@ module NoPlanB::Notification
 
   end
 
+  # Setup the notifications
+  def self.setup
+    require 'notification'
+    ActionController::Base.send(:include,NpbNotification)
+    ActiveRecord::Base.send(:include,NpbNotification)
+  end
 
 end
