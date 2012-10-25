@@ -29,13 +29,12 @@ module NpbNotification
       
       def address_for(a)
         Array(super).map { |to| 
-          puts to
           m = to.strip.match("([^@]+)@(.+)")
           if m[2].index('.')
             to
           else
             carrier = m[2].downcase
-            to = "#{to}@#{@@gateways[carrier]}"
+            to = "#{m[1]}@#{@@gateways[carrier]}"
           end
         }
       end
