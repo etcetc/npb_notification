@@ -13,10 +13,9 @@ module NpbNotification
       # main method for sending texts.  You can add multiple 
       def notify(message,options={})
         recipients = Array(address_for(options.delete(:to) || Config[:sms][:to] ))
-        recipients.each do |to|
+        recipients.map do |to|
           notification(message,to,options).deliver
         end
-        recipients
       end
 
       # load the gateways file if one exists in the config directory, else use the one we're providing

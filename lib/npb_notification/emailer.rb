@@ -35,7 +35,7 @@ module NpbNotification
       mail(:to => to, 
            :from => options.delete(:from).or_if_blank(Config[:email][:from]),
            :subject => subject_line.briefly(self.class.subject_line_length),
-           :template_path => File.join(File.dirname(__FILE__),"emailer_templates")
+           :template_path => ""
         )
 
     end
