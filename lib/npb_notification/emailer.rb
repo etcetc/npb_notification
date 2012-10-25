@@ -17,7 +17,7 @@ module NpbNotification
         recipients = Array(address_for(options.delete(:to) || Config[:email][:to] ))        
         m = notification(message,recipients, options)
         m.deliver
-        m.to
+        m
       end
     end
     

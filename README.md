@@ -16,12 +16,13 @@ Or install it yourself as:
 
     $ gem install npb_notification
 
-## Usage
+## Setup
 
 This gem requires you to do two things: 1) In your initializers directory please add a file, such as notifications.rb, with the following content:
 
   require 'npb_notification'
   NpbNotification.setup
+
 
 You also need to create the notifications config file, called notifications.yml that is placed in the config directory, and has a form like this:
 
@@ -43,6 +44,24 @@ You also need to create the notifications config file, called notifications.yml 
     addresses:
       joe: 2221114444@att
       jerry: 1112223333@verizon
+
+## Usage
+In your controllers and models you can send a short notification email via
+
+  npb_mail "this is the message"
+
+You can override who it goes to via:
+
+  npb_mail "Going to someone else",:to=>'someone@else.com'
+
+or you can add multiple people in the :to field in an array.  You can also use an alias that you then is defined in the configuration file 
+
+  npb_mail "Going to someone else",:to=>'harry'
+
+You can also send sms messages using the same formalism, but with the npb_sms method
+
+  npb_sms "Customer purchase!"
+
 
 ## Contributing
 
