@@ -52,9 +52,9 @@ module NpbNotification
 
   # Setup the notifications
   def self.setup
-    require 'notification'
     ActionController::Base.send(:include,NpbNotification)
     ActiveRecord::Base.send(:include,NpbNotification)
+    ActionMailer::Base.append_view_path(File.join(File.dirname(__FILE__),"npb_notification","views"))
   end
 
 end
