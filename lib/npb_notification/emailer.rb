@@ -34,7 +34,7 @@ module NpbNotification
       subject_line = options.delete(:subject) || ((self.class.subject_prefix ? "[#{self.class.subject_prefix} #{type}]".sub(' ]',']').gsub('[ ','[') : '') +  message).split("\n").first
       mail(:to => to, 
            :from => options.delete(:from).or_if_blank(Config[:email][:from]),
-           :subject => subject_line.briefly(self.class.subject_line_length),
+           :subject => subject_line[0..self.class.subject_line_length],
            :template_path => ""
         )
 
